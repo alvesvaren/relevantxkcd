@@ -6,6 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "migrate": "drizzle-kit migrate",
+    "build-and-migrate": "pnpm migrate && pnpm build",
     "lint": "next lint"
   },
   "dependencies": {
