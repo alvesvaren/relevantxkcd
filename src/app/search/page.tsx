@@ -79,9 +79,6 @@ export default async function Page({ searchParams }: { searchParams: Promise<unk
               </Select>
             </div>
           </div>
-
-          <input type='hidden' name='limit' value='9' />
-          <input type='hidden' name='offset' value={params.offset} />
         </form>
 
         <div className='mb-6 space-y-2'>
