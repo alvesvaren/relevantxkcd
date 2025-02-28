@@ -1,15 +1,9 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Slider } from "@/components/ui/slider";
-import { useState } from "react";
 
 export default function Home() {
-  const [minScore, setMinScore] = useState(0);
-
   return (
     <div className='flex flex-col items-center justify-center h-screen space-y-5'>
       <h1 className='text-4xl font-bold'>Relevant XKCD</h1>
@@ -45,24 +39,6 @@ export default function Home() {
               <SelectItem value='asc'>Ascending</SelectItem>
             </SelectContent>
           </Select>
-        </div>
-
-        <div className='space-y-2'>
-          <Label htmlFor='limit'>Results per page</Label>
-          <Input id='limit' name='limit' type='number' defaultValue='10' min='1' max='50' />
-        </div>
-
-        <div className='space-y-2'>
-          <Label htmlFor='offset'>Offset</Label>
-          <Input id='offset' name='offset' type='number' defaultValue='0' min='0' />
-        </div>
-
-        <div className='space-y-2'>
-          <div className='flex justify-between'>
-            <Label htmlFor='minScore'>Minimum Score</Label>
-            <span className='text-sm text-muted-foreground'>{minScore.toFixed(2)}</span>
-          </div>
-          <Slider id='minScore' name='minScore' min={0} max={1} step={0.01} defaultValue={[0]} onValueChange={values => setMinScore(values[0])} />
         </div>
       </form>
     </div>

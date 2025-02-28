@@ -33,7 +33,7 @@ export function SearchResultCard({ number, imgUrl, title, transcriptScore, expla
         <CardHeader className='p-4 pb-2'>
           <div className='flex items-center justify-between'>
             <div>
-              <span className='text-sm font-medium text-muted-foreground'>#{number}</span>
+              <span className='text-sm font-medium text-muted-foreground'>{number}</span>
               <h3 className='font-semibold line-clamp-1'>{title}</h3>
             </div>
           </div>
@@ -44,7 +44,7 @@ export function SearchResultCard({ number, imgUrl, title, transcriptScore, expla
           </div>
         </CardContent>
         <CardFooter className='flex justify-between p-4 pt-0'>
-          {similarity && <div className='text-xs text-muted-foreground'>Match: {(similarity * 100).toFixed(0)}%</div>}
+          {similarity && <div className='text-xs text-muted-foreground'>Match: {(similarity * 100).toFixed(2)}%</div>}
           <div className='opacity-0 transition-opacity group-hover:opacity-100 flex gap-2'>
             <Button
               variant='outline'

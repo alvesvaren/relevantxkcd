@@ -31,6 +31,15 @@ export async function search(data: z.infer<typeof searchParamsSchema>) {
       both: sql`(${similarity(comic.transcriptEmbedding)} + ${similarity(comic.explainationEmbedding)}) / 2`,
     };
 
+    // First get the total count
+    const [{ count }] = await db
+      .select({
+        count: sql<number>`count(*)`,
+      })
+      .from(comic)
+      .where(gt(similarityCol[sort], minScore));
+
+    // Then get the paginated results
     const results = await db
       .select({
         number: comic.number,
@@ -46,7 +55,7 @@ export async function search(data: z.infer<typeof searchParamsSchema>) {
       .limit(limit)
       .offset(offset);
 
-    return { results, code: 200 };
+    return { results, total: count, code: 200 };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return {

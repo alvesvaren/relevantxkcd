@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
+import Link from "next/link";
 
 interface SearchResult {
   number: number;
@@ -18,10 +19,10 @@ interface SearchResult {
   explainationScore: number;
 }
 
-export default async function Page({ searchParams }: { searchParams: unknown }) {
+export default async function Page({ searchParams }: { searchParams: Promise<unknown> }) {
   try {
-    const params = searchParamsSchema.parse(searchParams);
-    const { code, ...data } = await search(params);
+    const params = searchParamsSchema.omit({ minScore: true, limit: true }).parse(await searchParams);
+    const { code, ...data } = await search({ ...params, minScore: 0.2, limit: 9 });
 
     if ("error" in data) {
       return (
@@ -42,6 +43,9 @@ export default async function Page({ searchParams }: { searchParams: unknown }) 
     return (
       <div className='container mx-auto py-8'>
         <form action='/search' method='GET' className='mb-8 space-y-4 max-w-full'>
+          <Button variant='link' asChild className='p-0'>
+            <Link href='/'>&larr; Back to home</Link>
+          </Button>
           <div className='flex gap-2'>
             <Input name='q' placeholder='Search for a comic' defaultValue={params.q} />
             <Button type='submit'>Search</Button>
@@ -73,21 +77,6 @@ export default async function Page({ searchParams }: { searchParams: unknown }) 
                   <SelectItem value='asc'>Ascending</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-
-            <div className='space-y-2'>
-              <div className='flex justify-between'>
-                <Label htmlFor='minScore'>Minimum Score</Label>
-                <span className='text-sm text-muted-foreground'>{params.minScore.toFixed(2)}</span>
-              </div>
-              <Slider 
-                id='minScore' 
-                name='minScore' 
-                min={0} 
-                max={1} 
-                step={0.01} 
-                defaultValue={[params.minScore]} 
-              />
             </div>
           </div>
 
@@ -125,30 +114,16 @@ export default async function Page({ searchParams }: { searchParams: unknown }) 
 
             <div className='flex justify-center gap-2'>
               {currentPage > 1 && (
-                <Button
-                  variant='outline'
-                  onClick={() => {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('offset', String((currentPage - 2) * 9));
-                    window.location.href = url.toString();
-                  }}
-                >
-                  Previous
+                <Button variant='outline' asChild>
+                  <Link href={`/search?q=${query}&offset=${(currentPage - 2) * 9}`}>Previous</Link>
                 </Button>
               )}
               <span className='flex items-center px-4'>
                 Page {currentPage} of {totalPages}
               </span>
               {currentPage < totalPages && (
-                <Button
-                  variant='outline'
-                  onClick={() => {
-                    const url = new URL(window.location.href);
-                    url.searchParams.set('offset', String(currentPage * 9));
-                    window.location.href = url.toString();
-                  }}
-                >
-                  Next
+                <Button variant='outline' asChild>
+                  <Link href={`/search?q=${query}&offset=${currentPage * 9}`}>Next</Link>
                 </Button>
               )}
             </div>
