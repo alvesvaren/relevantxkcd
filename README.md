@@ -2,6 +2,8 @@
 
 A simple search engine for XKCD comics, based on openai embeddings.
 
+Might be slow for the first query if tesing out the hosted version because the database goes to sleep if inactive. Subsequent queries will be much faster.
+
 ## Indexing
 
 ```bash
